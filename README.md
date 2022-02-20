@@ -1,14 +1,13 @@
-# {Short snappy Title of your project} (Group X)
+# {School Tuition and Salary Dashboard} (Group H)
 
 - Your title can change over time.
 - Here you should add the problem this dashboard hopes to solve
 
 ## Team Members
 
-- Person 1: one sentence about you!
-- Person 2: one sentence about you!
-- Person 3: one sentence about you!
-- Person 4: one sentence about you!
+- Person 1: Can Jiang
+- Person 2: Bowen Yang
+- Person 3: Navdeep Singh Saini
 
 ## Describe your topic/interest in about 150-200 words
 
@@ -16,15 +15,11 @@
 
 ## About this Dashboard
 
-{You can use this area for any images you want to include}
+<img src ="sketch_withoutdescription.png" width="1000px">
 
-<img src ="images/test.png" width="100px">
+### Description of our app & sketch
 
-Ideally, you'd include a 5-7 second gif of your final dashboard.
-
-## Describe your dataset in about 150-200 words
-
-Add information about your dashboard here
+The app contains a U.S. map that shows all the states. The map is interactive and users can click on a state to show the information for that state. Below the map is a filter menu which can be used to adjust which schools will be displayed according to several selecting criteria (school type, degree length, state, in/out state, whether it has room & board and tuition range). A list of all the schools that meet the selecting criteria will be displayed in the top-right box, showing the detailed cost for that school. Below the school list are two bar chart, comparing the selected school's tuition and the projected salary potential with the state average and nation average.
 
 ## Acknowledgements and references 
 
