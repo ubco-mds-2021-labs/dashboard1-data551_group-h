@@ -1,7 +1,7 @@
 ### Section 1: Motivation and Purpose
 
 
-> Our role: Data scientist educational advisory firm
+> Our role: Data scientist For Educational Advisory Firm
 >
 > Target audience: US Educational Advisory Management
 >
