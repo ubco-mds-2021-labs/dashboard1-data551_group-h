@@ -80,9 +80,7 @@ All team members agree to the following conventions around course deadlines:
 2. Use the 2 days before the deadline for review and to address any concerns. 
 3. If you know you're struggling to reach a particular deadline, reach out to your teammates so that they can help you.
 
-...etc...
 
-*N.B. 
 
 ## Git Workflow
 
