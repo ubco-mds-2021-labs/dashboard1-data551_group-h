@@ -9,9 +9,9 @@ If you are not able to agree on these points, it is a sign that your group may b
 
 | Name     | GitHub Handle                          |
 |----------|----------------------------------------|
-| Navdeep Singh Saini | [@username](https://github.com/navdeep94) |
-| Bowen Yang | [@username](https://github.com/boweny0319) |
-| Can Jiang | [@username](https://github.com/CenatexCJ) |
+| Navdeep Singh Saini | [@navdeep94](https://github.com/navdeep94) |
+| Bowen Yang | [@boweny0319](https://github.com/boweny0319) |
+| Can Jiang | [@CenatexCJ](https://github.com/CenatexCJ) |
 
 ## Participation
 
