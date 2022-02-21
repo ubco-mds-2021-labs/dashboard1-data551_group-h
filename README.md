@@ -1,4 +1,4 @@
-# {School Tuition and Salary Dashboard} (Group H)
+# {School Finder Dashboard} (Group H)
 
 - Your title can change over time.
 - Here you should add the problem this dashboard hopes to solve
