@@ -1,7 +1,7 @@
 # School Finder Dashboard (Group H)
 
-- Your title can change over time.
-- Here you should add the problem this dashboard hopes to solve
+- The title can change over time.
+- 
 
 ## Team Members
 
