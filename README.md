@@ -1,7 +1,7 @@
 # School Finder Dashboard (Group H)
 
 - The title can change over time.
-- 
+- The dashboards helps the students and their guardians in selecting schools for higher education based on all the analysis taken into the consideration across various states of the United States. For examples, our visualization includes Comparison between Tuition fees with the national tuition fees.
 
 ## Team Members
 
