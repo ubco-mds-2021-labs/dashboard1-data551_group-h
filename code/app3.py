@@ -7,6 +7,14 @@ import altair as alt
 import pandas as pd
 
 df = pd.read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/tuition_cost.csv')
+df_filtered = df
+#state_avg_instate = 
+nation_avg_instate = sum(df_filtered['in_state_total'])/len(df_filtered['in_state_total'])
+df_filtered = pd.DataFrame({
+        "Type": ["National Average", "State Average"],
+        "Tuition": [nation_avg_instate, sum(df_filtered.in_state_total)/len(df_filtered.in_state_total)]
+    })
+
 # list of US states
 states = {
     'AK': 'Alaska',
@@ -69,8 +77,8 @@ temp_tuition_dic = {"Type": ["National Average", "State Average", "This School"]
 df_tuition = pd.DataFrame.from_dict(temp_tuition_dic)
 
 # plot function for tuition
-def plot_bar(xcol = 'Type', ycol='Tuition'):
-    chart = alt.Chart(df_tuition).mark_bar().encode(
+def plot_bar(xcol = 'Type', ycol='Tuition', data = df_filtered):
+    chart = alt.Chart(data).mark_bar().encode(
         x=xcol,
         y=ycol,
         color = xcol).properties(
@@ -80,9 +88,9 @@ def plot_bar(xcol = 'Type', ycol='Tuition'):
     return chart.interactive().to_html()
 
 # barchart for tuition and salary
-plot1 = html.Iframe(id='bar_chart_tuition', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition'),
+plot1 = html.Iframe(id='bar_chart_tuition', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
                     style={'width': '600px', 'height': '600px'})
-plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition'),
+plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
                     style={'width': '600px', 'height': '600px'})                   
 
 
@@ -95,7 +103,7 @@ app.layout = dbc.Container([
         dcc.Markdown('''###### School Type '''),
         dcc.Dropdown(id='school-type', options = ['Private', 'Public', 'For-profit'], value = 'Private'),
         dcc.Markdown('''###### Degree Length '''),
-        dcc.Dropdown(id='degree-length', options = ['4 Years', '2 Years'], value = '4 Years'),
+        dcc.Dropdown(id='degree-length', options = ['4 Year', '2 Year'], value = '4 Year'),
         dcc.Markdown('''###### State '''),
         dcc.Dropdown(id='state', options = state_list, value = 'California')
     ]),
@@ -127,20 +135,30 @@ app.layout = dbc.Container([
 ])
 
 
+## Callback functions
 @app.callback(
-    Output('dd-output-container-school-type', 'children'),
-    Input('school-type', 'value')
-)
-def update_output(value):
-    return f'You have selected {value}'
+    Output('bar_chart_tuition','srcDoc'), # Specifies where the output "goes"
+    Input('school-type', 'value'),
+    Input('degree-length', 'value'),
+    Input('state', 'value'))
+def update_plot(type = 'Private', degree = '4 Year', state = 'California', data=df):
+    newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == type)]
+    new_df = pd.DataFrame({
+        "Type": ["National Average", "State Average"],
+        "Tuition": [nation_avg_instate, sum(newdata.in_state_total)/len(newdata.in_state_total)]
+    })
+    newplot = plot_bar(xcol = 'Type', ycol='Tuition', data = new_df)
+    return newplot
 
+"""
 @app.callback(
-    Output('output-container-range-slider', 'children'),
-    Input('my-range-slider', 'value')
-)
-def update_output(value):
-    return 'You have selected "{}"'.format(value)
-
-
+    #Output('bar_chart_tuition','srcDoc'), # Specifies where the output "goes"
+    Input('school-type', 'value'),
+    Input('degree-length', 'value'),
+    Input('state', 'value'))
+def update_data(type = 'Private', degree = '4 Year', state = 'California', data=df):
+    newdf = data[(data.State == state) & (data.Degree_length == degree) & (data.Type == type)]
+    return newdf
+"""
 if __name__ == "__main__":
     app.run_server(host="127.0.0.3", debug=True)
