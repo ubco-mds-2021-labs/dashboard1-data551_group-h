@@ -97,7 +97,7 @@ def generate_school_items(n=9):
                         dbc.Col(html.Div([
                             cur_btn
                         ])),
-                    ],style = {"margin-top":"8px"},align="end"
+                    ],style = {"marginTop":"8px"},align="end"
                 ),
             ], style = {"width":"822px", "margin": "auto"}
         )
@@ -108,13 +108,21 @@ def generate_school_items(n=9):
 
 ## Layout
 app.layout = dbc.Container([
-    html.Div( 
-    [
-        dbc.ListGroup(id="schoollist",children=generate_school_items()),
-        testbutton,
-        html.Div(children="Test", id="print")
 
-    ], style = {"overflow": "auto", "width":"870px", "height":"400px", "margin": "auto", "margin-top":"50px"})
+    dbc.Card([
+        # html.Div("School List", style = {"margin": "auto", "width": "822px"}),
+        html.H4("School List", style = {"margin": "auto", "width": "830px", "marginTop":"12px"}),
+        html.Hr(style = {"margin": "10px 10px"}),
+        html.Div( 
+        [
+            dbc.ListGroup(id="schoollist",children=generate_school_items()),
+            testbutton,
+            html.Div(children="Test", id="print")
+
+        ], style = {"overflow": "auto", "height":"320px", "margin": "auto"})
+
+    ],style = {"width":"870px", "height":"400px", "margin": "auto", "marginTop":"50px"}),
+    
 ])
 
 
