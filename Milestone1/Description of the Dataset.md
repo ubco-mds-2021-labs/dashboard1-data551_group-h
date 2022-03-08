@@ -1,3 +1,0 @@
-## Description of the Dataset
-
-We will be visualizing a dataset of approximately 3,000 colleges & universities across the United States. Each university has a number of variables that describe the state where the school is located (`state`, `state_code`), the `type` of school (public, private, for-profit), the `degree_length` of the program (4-year, 2-year), and the cost of the program (`room_and_board`, `in_state_tuition`, `in_state_total`, `out_of_state_tuition`, `out_of_state_total`). We will also integrate another dataset that contains the salary potential for about 1,000 schools. We will join these 2 datasets together by school name and use the joined dataset for the visualization. 
