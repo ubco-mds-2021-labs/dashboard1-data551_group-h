@@ -2,7 +2,6 @@ dash
 dash_bootstrap_components
 altair
 vega_datasets
-json
 pandas
 numpy
 gunicorn
