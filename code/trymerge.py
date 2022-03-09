@@ -23,18 +23,31 @@ universities_tuition = df
 df['index1'] = df.index
 filtered_df = df
 
-df_filtered = df
+df_filtered = df # tuition dataframe
+salary_filtered = universities_salary # salary dataframe
 
 
 
-#state_avg_instate = 
+# national average instate_total for tuition
 nation_avg_instate = sum(df_filtered['in_state_total'])/len(df_filtered['in_state_total'])
+
+# national average early_career_pay for salary
+nation_avg_early = sum(salary_filtered['early_career_pay'])/len(salary_filtered['early_career_pay'])
+
+# national average mid_career_pay for salary
+nation_avg_mid = sum(salary_filtered['mid_career_pay'])/len(salary_filtered['mid_career_pay'])
+
 df_filtered = pd.DataFrame({
         "Type": ["National Average", "State Average"],
         "Tuition": [nation_avg_instate, sum(df_filtered.in_state_total)/len(df_filtered.in_state_total)]
     })
 
-
+new_df_test = pd.DataFrame({
+    "Type": ["National Average", "State Average", "This School"],
+    "Early Career": [4, 5, 6],
+    "Mid Career": [7, 8, 9]
+})
+new_df_test_long = pd.melt(new_df_test, id_vars=['Type'], var_name='career_stage', value_name='salary')
 
 testdf = df.head(10)
 
@@ -333,10 +346,23 @@ def plot_bar(xcol = 'Type', ycol='Tuition', data = df_filtered):
             )
     return chart.interactive().to_html()
 
+# plot function for salary
+def plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data=new_df_test_long):
+    chart = alt.Chart(data).mark_bar().encode(
+        x=x,
+        y=y,
+        color=color,
+        column=column
+        ).properties(
+            height=200, 
+            width=60
+            )
+    return chart.interactive().to_html()  
+
 # barchart for tuition and salary
 plot1 = html.Iframe(id='bar_chart_tuition', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
                     style={'width': '420px', 'height': '350px'})
-plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
+plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data = new_df_test_long),
                     style={'width': '420px', 'height': '350px'})                   
 
 component_schoollist = dbc.Card([
@@ -429,7 +455,7 @@ app.layout = dbc.Container([
 
 ], style = {"max-width": "2000px"})
 
-# Callback functions
+# Callback functions for tuition chart
 @app.callback(
     Output('bar_chart_tuition','srcDoc'), # Specifies where the output "goes"
     Input('school-type', 'value'),
@@ -470,6 +496,56 @@ def update_plot(school_type, degree, state, args, data=df, schoolindex = 0): #, 
         "Tuition": [nation_avg_instate, sum(newdata.in_state_total)/len(newdata.in_state_total), cur_school_tuition]
     })
     newplot = plot_bar(xcol = 'Type', ycol='Tuition', data = new_df)
+    return newplot
+
+# Callback functions for salary chart
+@app.callback(
+    Output('bar_chart_salary','srcDoc'), # Specifies where the output "goes"
+    Input('state', 'value'),
+    Input({'type': 'selectbtn', 'index': ALL}, 'n_clicks'), prevent_initial_call=True
+    # Input('in-out-state', 'value'),
+    # Input('room-board', 'value')
+    )
+def update_plot(state, args, data=salary_filtered, schoolindex = 0): #, in_out_state = 1, room_board = 1
+    schoolid = -1
+    if len(dash.callback_context.triggered) == 1:
+        jsonstr = dash.callback_context.triggered[0]["prop_id"].split('.')[0]
+        if "index" in jsonstr:
+            jsonobj = json.loads(jsonstr)
+            schoolid = jsonobj["index"]
+    
+    
+    newdata = data[data.state_name == state]
+    if schoolid == -1:
+        cur_school_early_salary = 0
+        cur_school_mid_salary = 0
+    else:
+        schoolindex = schoolid
+        
+        cur_school_early_salary = newdata[newdata["index1"] == schoolindex].early_career_pay
+        if len(cur_school_early_salary) == 0:
+            cur_school_early_salary = 0
+        else:
+            cur_school_early_salary = cur_school_early_salary.iloc[0]
+
+        cur_school_mid_salary = newdata[newdata["index1"] == schoolindex].mid_career_pay
+        if len(cur_school_mid_salary) == 0:
+            cur_school_mid_salary = 0
+        else:
+            cur_school_mid_salary = cur_school_mid_salary.iloc[0]
+    
+    # cur_school_tuition = newdata[newdata["index1"] == schoolindex].in_state_total
+    # if len(cur_school_tuition) == 0:
+    #     cur_school_tuition = 0
+    # else:
+    #     cur_school_tuition = cur_school_tuition[0]
+    new_df = pd.DataFrame({
+        "Type": ["National Average", "State Average", "This School"],
+        "Early Career": [nation_avg_early, sum(newdata.early_career_pay)/len(newdata.early_career_pay), cur_school_early_salary],
+        "Mid Career": [nation_avg_mid, sum(newdata.mid_career_pay)/len(newdata.mid_career_pay), cur_school_mid_salary]
+    })
+    new_df_long = pd.melt(new_df, id_vars=['Type'], var_name='career_stage', value_name='salary')
+    newplot = plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data = new_df_long)
     return newplot
 
 
@@ -532,4 +608,4 @@ def update_plot_map(option):
 
 
 if __name__ == "__main__":
-    app.run_server(host="127.0.0.1", debug=True)
+    app.run_server(host="127.0.0.4", debug=True)
