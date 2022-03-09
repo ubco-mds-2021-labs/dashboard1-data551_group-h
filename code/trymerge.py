@@ -349,7 +349,7 @@ component_schoollist = dbc.Card([
             dbc.ListGroup(id="schoollist",children=[]), #generate_school_items()
         ], style = {"overflow": "auto", "height":"320px", "margin": "auto"})
 
-    ],style = {"width":"870px", "height":"400px", "marginTop":"50px"})
+    ],style = {"width":"870px", "height":"400px", "marginTop":"20px"})
 
 component_control = dbc.Card([
        # Dropdown menu for School Type, Degree length, State
@@ -375,7 +375,7 @@ component_control = dbc.Card([
         ],style = {"margin": "auto", "width": "440px", "marginTop":"5px"}),
         
 
-    ],style = {"width":"500px", "height":"400px", "marginTop":"50px"})
+    ],style = {"width":"500px", "height":"400px", "marginTop":"20px"})
 
 component_heatmap = dbc.Card([
 
@@ -393,7 +393,7 @@ component_heatmap = dbc.Card([
             # dbc.Row(dbc.Col(map_dropdown)),
         dbc.Row(dbc.Col(plot_map))
 
-    ],style = {"width":"500px", "height":"400px", "marginTop":"50px"})
+    ],style = {"width":"500px", "height":"400px", "marginTop":"20px"})
 
 
 component_barchart = dbc.Card([
@@ -404,7 +404,7 @@ component_barchart = dbc.Card([
             style = {"marginTop":"48px"}
         ),
 
-    ],style = {"width":"870px", "height":"400px", "marginTop":"50px"}),
+    ],style = {"width":"870px", "height":"400px", "marginTop":"20px"}),
 
 
 
@@ -430,20 +430,45 @@ app.layout = dbc.Container([
 
 ], style = {"max-width": "2000px"})
 
-## Callback functions
+# Callback functions
 @app.callback(
     Output('bar_chart_tuition','srcDoc'), # Specifies where the output "goes"
     Input('school-type', 'value'),
     Input('degree-length', 'value'),
     Input('state', 'value'),
+    Input({'type': 'selectbtn', 'index': ALL}, 'n_clicks'), prevent_initial_call=True
     # Input('in-out-state', 'value'),
     # Input('room-board', 'value')
     )
-def update_plot(school_type = 'Private', degree = '4 Year', state = 'California', data=df): #, in_out_state = 1, room_board = 1
+def update_plot(school_type, degree, state, args, data=df, schoolindex = 0): #, in_out_state = 1, room_board = 1
+    schoolid = -1
+    if len(dash.callback_context.triggered) == 1:
+        jsonstr = dash.callback_context.triggered[0]["prop_id"].split('.')[0]
+        if "index" in jsonstr:
+            jsonobj = json.loads(jsonstr)
+            schoolid = jsonobj["index"]
+    
+    
     newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
+    if schoolid == -1:
+        cur_school_tuition = 0
+    else:
+        schoolindex = schoolid
+        
+        cur_school_tuition = newdata[newdata["index1"] == schoolindex].in_state_total
+        if len(cur_school_tuition) == 0:
+            cur_school_tuition = 0
+        else:
+            cur_school_tuition = cur_school_tuition.iloc[0]
+    
+    # cur_school_tuition = newdata[newdata["index1"] == schoolindex].in_state_total
+    # if len(cur_school_tuition) == 0:
+    #     cur_school_tuition = 0
+    # else:
+    #     cur_school_tuition = cur_school_tuition[0]
     new_df = pd.DataFrame({
-        "Type": ["National Average", "State Average"],
-        "Tuition": [nation_avg_instate, sum(newdata.in_state_total)/len(newdata.in_state_total)]
+        "Type": ["National Average", "State Average", "This School"],
+        "Tuition": [nation_avg_instate, sum(newdata.in_state_total)/len(newdata.in_state_total), cur_school_tuition]
     })
     newplot = plot_bar(xcol = 'Type', ycol='Tuition', data = new_df)
     return newplot
@@ -458,29 +483,52 @@ def update_plot(school_type = 'Private', degree = '4 Year', state = 'California'
     # Input('room-board', 'value')
     )
 def update_schoollist(school_type = 'Private', degree = '4 Year', state = 'California', data=df):
-    df_filtered = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
-    return generate_school_items(df_filtered)
+    filtered_df = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
+    return generate_school_items(filtered_df)
 
 
 
-@app.callback(
-    Output('print', 'children'),
-    Input({'type': 'selectbtn', 'index': ALL}, 'n_clicks'), prevent_initial_call=True
-)
-def update_print(args):
-    schoolid = -1
-    if len(dash.callback_context.triggered) == 1:
-        jsonstr = dash.callback_context.triggered[0]["prop_id"].split('.')[0]
-        jsonobj = json.loads(jsonstr)
-        schoolid = jsonobj["index"]
-    return schoolid
+# @app.callback(
+#     Output('bar_chart_tuition','srcDoc'),
+#     Input('school-type', 'value'),
+#     Input('degree-length', 'value'),
+#     Input('state', 'value'),
+#     # Input({'type': 'selectbtn', 'index': ALL}, 'n_clicks'), prevent_initial_call=True
+# )
+# def update_print(school_type, degree, state, args):
+#     # schoolid = -1
+#     # if len(dash.callback_context.triggered) == 1:
+#     #     jsonstr = dash.callback_context.triggered[0]["prop_id"].split('.')[0]
+#     #     jsonobj = json.loads(jsonstr)
+#     #     schoolid = jsonobj["index"]
+
+#     # data = df
+#     newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
+#     cur_school_tuition = 0
+#     # if schoolid == -1:
+#     #     cur_school_tuition = 0
+#     # else:
+#     #     schoolindex = schoolid
+        
+#     #     cur_school_tuition = newdata[newdata["index1"] == schoolindex].in_state_total
+#     #     if len(cur_school_tuition) == 0:
+#     #         cur_school_tuition = 0
+#     #     else:
+#     #         cur_school_tuition = cur_school_tuition.iloc[0]
+#     new_df = pd.DataFrame({
+#         "Type": ["National Average", "State Average", "This School"],
+#         "Tuition": [nation_avg_instate, sum(newdata.in_state_total)/len(newdata.in_state_total), cur_school_tuition]
+#     })
+#     newplot = plot_bar(xcol = 'Type', ycol='Tuition', data = new_df)
+#     return newplot
+    # return str(new_df)
 
 ## Callback functions
 @app.callback(
     Output('altair_chart_map_us','srcDoc'),
     Input('chart_dropdown', 'value')
     )
-def update_plot(option):
+def update_plot_map(option):
     return plot_map_us(option)
 
 
