@@ -17,6 +17,8 @@ import altair as alt
 
 
 df = pd.read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/tuition_cost.csv')
+universities_salary = pd.read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-03-10/salary_potential.csv')
+universities_tuition = df
 
 df['index1'] = df.index
 filtered_df = df
@@ -49,6 +51,142 @@ testbutton = html.Div(
 
 ## components
 
+## heatmap
+
+universities_tuition = universities_tuition.rename(columns={
+    "name": "Name", 
+    "state": "State", 
+    "state_code": "State_code",
+    "type": "Type",
+    "degree_length": "Degree_length",
+    "room_and_board": "Room_and_Board",
+    "in_state_tuition": "Instate_tuition",
+    "in_state_total": "Instate_total",
+    "out_of_state_tuition": "Outstate_tuition",
+    "out_of_state_total": "Outstate_total"
+})
+
+universities_salary = universities_salary.rename(columns={
+    "rank": "Rank", 
+    "name": "Name", 
+    "state_name": "State_name",
+    "early_career_pay": "Early_career_pay",
+    "mid_career_pay": "mid_career_pay",
+    "make_world_better_percent": "make_world_better_percent",
+    "stem_percent": "stem_percent"
+})
+
+universities_tuition.dropna(inplace = True)
+state_tuition = universities_tuition.groupby(['State'])[['Instate_tuition','Outstate_tuition']].mean()
+state_tuition = state_tuition.reset_index(level=['State'])
+
+state_tuition.loc[7.5] = "District of Columbia", 6152, 26045
+state_tuition = state_tuition.sort_index().reset_index(drop=True)
+
+state_tuition.loc[50.5] = "Puerto Rico", 4109, 6733
+state_tuition = state_tuition.sort_index().reset_index(drop=True)
+
+universities_salary.dropna(inplace = True)
+state_salary = universities_salary.groupby(['State_name'])[['Early_career_pay','mid_career_pay']].mean()
+state_salary = state_salary.reset_index(level=['State_name'])
+
+state_salary.loc[7.5] = "District of Columbia", 80439, 106800
+state_salary = state_salary.sort_index().reset_index(drop=True)
+
+state_salary.loc[50.5] = "Puerto Rico", 25332, 56108
+state_salary = state_salary.sort_index().reset_index(drop=True)
+
+universities_info = data.population_engineers_hurricanes()
+
+universities_info['Outstate_tuition'] = state_tuition['Outstate_tuition']
+universities_info['Instate_tuition'] = state_tuition['Instate_tuition']
+universities_info['Early_career_pay'] = state_salary['Early_career_pay']
+universities_info['mid_career_pay'] = state_salary['mid_career_pay']
+
+universities_info.drop(columns=['population', 'engineers', 'hurricanes'], inplace=True)
+
+states_url = alt.topo_feature(data.us_10m.url, feature='states')
+
+variable_list = ['Instate_tuition', 'Outstate_tuition', 'Early_career_pay', 'mid_career_pay']
+
+
+def plot_map_us(option = 'Instate_tuition'):
+    if option == 'Instate_tuition':
+        map_us = alt.Chart(states_url).mark_geoshape().encode(
+            color='Instate_tuition:Q',
+            tooltip=[
+                alt.Tooltip('state:N', title='State'),
+                alt.Tooltip('Instate_tuition:Q', title='Instate Tuition Fees')
+                ]
+            ).transform_lookup(
+                lookup='id',
+                from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
+                ).properties(
+                    width=350,
+                    height=300
+                    ).project(
+                        type='albersUsa'
+                        )#.configure(background='#E6E6FA')
+
+    elif option == 'Outstate_tuition':
+        map_us = alt.Chart(states_url).mark_geoshape().encode(
+            color='Outstate_tuition:Q',
+            tooltip=[
+                alt.Tooltip('state:N', title='State'),
+                alt.Tooltip('Outstate_tuition:Q', title='Outstate Tuition Fees')
+                ]
+            ).transform_lookup(
+                lookup='id',
+                from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
+                ).properties(
+                    width=350,
+                    height=300
+                    ).project(
+                        type='albersUsa'
+                        )#.configure(background='#E6E6FA')
+    elif option == 'Early_career_pay':
+        map_us = alt.Chart(states_url).mark_geoshape().encode(
+            color='Early_career_pay:Q',
+            tooltip=[
+                alt.Tooltip('state:N', title='State'),
+                alt.Tooltip('Early_career_pay:Q', title='Early career pay')
+                ]
+            ).transform_lookup(
+                lookup='id',
+                from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
+                ).properties(
+                    width=350,
+                    height=300
+                    ).project(
+                        type='albersUsa'
+                        )#.configure(background='#E6E6FA')
+
+    elif option == 'mid_career_pay':
+        map_us = alt.Chart(states_url).mark_geoshape().encode(
+            color='mid_career_pay:Q',
+            tooltip=[
+                alt.Tooltip('state:N', title='State'),
+                alt.Tooltip('mid_career_pay:Q', title='Mid Career Pay')
+                ]
+            ).transform_lookup(
+                lookup='id',
+                from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
+                ).properties(
+                    width=350,
+                    height=300
+                    ).project(
+                        type='albersUsa'
+                        )#.configure(background='#E6E6FA')
+
+    return map_us.to_html()
+
+plot_map = html.Iframe(id='altair_chart_map_us',srcDoc=plot_map_us(option = 'Instate_tuition'),
+style={'width': '100%', 'height': '400px'})
+map_dropdown = html.Div(dcc.Dropdown(id='chart_dropdown',value='Instate_tuition', options = [{'label': i, 'value': i} for i in universities_info.columns if i not in ['Name'] and (i == 'Instate_tuition' or i == 'Outstate_tuition' or i == 'Early_career_pay' or i == 'mid_career_pay')], style={'border-width': '3', 'width': '250px'}))
+
+
+
+## school list
 def generate_school_items(filtered_school_df):
     schoolitems = []
     for i in range(len(filtered_school_df)):
@@ -191,16 +329,16 @@ def plot_bar(xcol = 'Type', ycol='Tuition', data = df_filtered):
         x=xcol,
         y=ycol,
         color = xcol).properties(
-            height=400, 
-            width=400
+            height=200, 
+            width=200
             )
     return chart.interactive().to_html()
 
 # barchart for tuition and salary
 plot1 = html.Iframe(id='bar_chart_tuition', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
-                    style={'width': '600px', 'height': '600px'})
+                    style={'width': '420px', 'height': '350px'})
 plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
-                    style={'width': '600px', 'height': '600px'})                   
+                    style={'width': '420px', 'height': '350px'})                   
 
 component_schoollist = dbc.Card([
         # html.Div("School List", style = {"margin": "auto", "width": "822px"}),
@@ -235,28 +373,59 @@ component_control = dbc.Card([
             dcc.Markdown('''###### Tuition Rangae '''),
             dcc.RangeSlider(0, 80000, 10000, value=[30000, 60000], id='my-range-slider')
         ],style = {"margin": "auto", "width": "440px", "marginTop":"5px"}),
+        
 
     ],style = {"width":"500px", "height":"400px", "marginTop":"50px"})
+
+component_heatmap = dbc.Card([
+
+        dbc.Row([
+            dbc.Col(html.H4("US Heat Map"), width="auto"),
+            dbc.Col(map_dropdown, width="auto")
+        ], justify="between", style = {"margin": "auto", "width": "480px", "marginTop":"12px"}),
+        dbc.Row([
+            html.Hr(style = {"margin": "10px 10px", "width": "460px"}),
+        ], style = {"margin": "auto", "width": "480px"}),
+        # html.Div(children='''
+        #         US Heat Map
+        #     ''',style={'color': 'brown', 'font-weight': 'bold'}),
+            # html.P(),
+            # dbc.Row(dbc.Col(map_dropdown)),
+        dbc.Row(dbc.Col(plot_map))
+
+    ],style = {"width":"500px", "height":"400px", "marginTop":"50px"})
+
+
+component_barchart = dbc.Card([
+        # Tuition and Salary bar plot 
+        html.Div(
+            className='Chart Row',
+            children=[plot1, plot2],
+            style = {"marginTop":"48px"}
+        ),
+
+    ],style = {"width":"870px", "height":"400px", "marginTop":"50px"}),
+
+
 
 ## Layout
 app.layout = dbc.Container([
 
     dbc.Row(
         [
+            dbc.Col(component_heatmap, width="auto"),
             dbc.Col(component_schoollist, width="auto"),
-            dbc.Col(component_control, width="auto"),
+            
         ],style = {"margin": "auto", "width": "1440px"}
     ),
 
+    dbc.Row(
+        [
+            dbc.Col(component_control, width="auto"),
+            dbc.Col(component_barchart, width="auto"),
+        ],style = {"margin": "auto", "width": "1440px"}
+    ),
     
-    dbc.Card([
-        # Tuition and Salary bar plot 
-        html.Div(
-            className='Chart Row',
-            children=[plot1, plot2]
-        ),
-
-    ],style = {"width":"870px", "height":"400px", "marginTop":"50px"}),
 
 
 ], style = {"max-width": "2000px"})
@@ -305,6 +474,14 @@ def update_print(args):
         jsonobj = json.loads(jsonstr)
         schoolid = jsonobj["index"]
     return schoolid
+
+## Callback functions
+@app.callback(
+    Output('altair_chart_map_us','srcDoc'),
+    Input('chart_dropdown', 'value')
+    )
+def update_plot(option):
+    return plot_map_us(option)
 
 
 if __name__ == "__main__":
