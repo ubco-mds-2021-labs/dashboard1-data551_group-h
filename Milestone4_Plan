@@ -6,6 +6,5 @@ Below is the list of items that we are taking to the scope of milestone4 so that
 Also we need to improve the x axis labels
 - Remove Instate, Outstate, room and board and no board
 - Map to highlight the state which is selected - This needs to be done if it is feasible to do, need to reasearch upon this
-- On clicking District of Columbia, getting error, maybe because of no data, needs to be removed from the state list in the code
 
 Will add more things in case in case of more brainstorming
