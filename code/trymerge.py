@@ -271,7 +271,6 @@ states = {
     'CA': 'California',
     'CO': 'Colorado',
     'CT': 'Connecticut',
-    'DC': 'District of Columbia',
     'DE': 'Delaware',
     'FL': 'Florida',
     'GA': 'Georgia',
@@ -370,7 +369,7 @@ component_control = dbc.Card([
         
         # Tuition Range Slider
         html.Div([
-            dcc.Markdown('''###### Tuition Rangae '''),
+            dcc.Markdown('''###### Tuition Range '''),
             dcc.RangeSlider(0, 80000, 10000, value=[30000, 60000], id='my-range-slider')
         ],style = {"margin": "auto", "width": "440px", "marginTop":"5px"}),
         
