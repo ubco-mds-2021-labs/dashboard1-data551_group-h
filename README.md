@@ -8,6 +8,11 @@
 
 [Link to Can's Deployment](https://us-school-finder-can.herokuapp.com/)
 
+| Link      | Repository |
+| ----------- | ----------- |
+| [Link to the deployed app](https://us-school-finder.herokuapp.com/)     | Title       |
+| Paragraph   | Text        |
+
 ## Goals
 
 - The dashboard helps the students and their guardians in selecting schools for higher education based on all the analysis taken into the consideration across various states of the United States.
