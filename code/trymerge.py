@@ -23,24 +23,36 @@ universities_tuition = df
 df['index1'] = df.index
 filtered_df = df
 
-df_filtered = df
+df_filtered = df # tuition dataframe
+salary_filtered = universities_salary # salary dataframe
 
+merged_df = pd.merge(df, universities_salary, how='inner', on='name')
 
-
-#state_avg_instate = 
+# national average instate_total for tuition
 nation_avg_instate = sum(df_filtered['in_state_total'])/len(df_filtered['in_state_total'])
+
+# national average early_career_pay for salary
+nation_avg_early = sum(salary_filtered['early_career_pay'])/len(salary_filtered['early_career_pay'])
+
+# national average mid_career_pay for salary
+nation_avg_mid = sum(salary_filtered['mid_career_pay'])/len(salary_filtered['mid_career_pay'])
+
 df_filtered = pd.DataFrame({
         "Type": ["National Average", "State Average"],
         "Tuition": [nation_avg_instate, sum(df_filtered.in_state_total)/len(df_filtered.in_state_total)]
     })
 
-
+new_df_test = pd.DataFrame({
+    "Type": ["National Average", "State Average", "This School"],
+    "Early Career": [4, 5, 6],
+    "Mid Career": [7, 8, 9]
+})
+new_df_test_long = pd.melt(new_df_test, id_vars=['Type'], var_name='career_stage', value_name='salary')
 
 testdf = df.head(10)
 
 
 app = dash.Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
-server = app.server
 app.config.suppress_callback_exceptions = True
 
 testbutton = html.Div(
@@ -334,10 +346,23 @@ def plot_bar(xcol = 'Type', ycol='Tuition', data = df_filtered):
             )
     return chart.interactive().to_html()
 
+# plot function for salary
+def plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data=new_df_test_long):
+    chart = alt.Chart(data).mark_bar().encode(
+        x=x,
+        y=y,
+        color=color,
+        column=column
+        ).properties(
+            height=200, 
+            width=60
+            )
+    return chart.interactive().to_html()  
+
 # barchart for tuition and salary
 plot1 = html.Iframe(id='bar_chart_tuition', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
                     style={'width': '420px', 'height': '350px'})
-plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
+plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data = new_df_test_long),
                     style={'width': '420px', 'height': '350px'})                   
 
 component_schoollist = dbc.Card([
@@ -355,23 +380,23 @@ component_control = dbc.Card([
        # Dropdown menu for School Type, Degree length, State
         html.Div([
             dcc.Markdown('''###### School Type '''),
-            dcc.Dropdown(id='school-type', options = ['Private', 'Public', 'For-profit'], value = 'Private'),
+            dcc.Dropdown(id='school-type', options = ['Private', 'Public', 'For-profit'], value = 'Private', style = {"marginBottom":"20px"}),
             dcc.Markdown('''###### Degree Length '''),
-            dcc.Dropdown(id='degree-length', options = ['4 Year', '2 Year'], value = '4 Year'),
+            dcc.Dropdown(id='degree-length', options = ['4 Year', '2 Year'], value = '4 Year', style = {"marginBottom":"20px"}),
             dcc.Markdown('''###### State '''),
-            dcc.Dropdown(id='state', options = state_list, value = 'California')
+            dcc.Dropdown(id='state', options = state_list, value = 'California', style = {"marginBottom":"20px"})
         ],style = {"margin": "auto", "width": "440px", "marginTop":"20px"}),
 
-        # In-state/Out-of-state & Room and board
-        html.Div([
-            dcc.RadioItems(options = [{"label": 'In-state', "value": 1}, {"label":'Out-of-state', "value": 0}], value = 1, id = "in-out-state", inline=True),
-            dcc.RadioItems(options = [{"label": 'Room and board', "value": 1}, {"label":'No room and board', "value": 0}], id="room-board", value = 1, inline=True)
-        ],style = {"margin": "auto", "width": "440px", "marginTop":"5px"}),
+        # # In-state/Out-of-state & Room and board
+        # html.Div([
+        #     dcc.RadioItems(options = [{"label": 'In-state', "value": 1}, {"label":'Out-of-state', "value": 0}], value = 1, id = "in-out-state", inline=True),
+        #     dcc.RadioItems(options = [{"label": 'Room and board', "value": 1}, {"label":'No room and board', "value": 0}], id="room-board", value = 1, inline=True)
+        # ],style = {"margin": "auto", "width": "440px", "marginTop":"5px"}),
         
-        # Tuition Range Slider
+        # # Tuition Range Slider
         html.Div([
             dcc.Markdown('''###### Tuition Range '''),
-            dcc.RangeSlider(0, 80000, 10000, value=[30000, 60000], id='my-range-slider')
+            dcc.RangeSlider(0, 80000, 10000, value=[0, 80000], id='my-range-slider')
         ],style = {"margin": "auto", "width": "440px", "marginTop":"5px"}),
         
 
@@ -430,17 +455,17 @@ app.layout = dbc.Container([
 
 ], style = {"max-width": "2000px"})
 
-# Callback functions
+# Callback functions for tuition chart
 @app.callback(
     Output('bar_chart_tuition','srcDoc'), # Specifies where the output "goes"
     Input('school-type', 'value'),
     Input('degree-length', 'value'),
     Input('state', 'value'),
+    Input('my-range-slider', 'value'),
     Input({'type': 'selectbtn', 'index': ALL}, 'n_clicks'), prevent_initial_call=True
-    # Input('in-out-state', 'value'),
     # Input('room-board', 'value')
     )
-def update_plot(school_type, degree, state, args, data=df, schoolindex = 0): #, in_out_state = 1, room_board = 1
+def update_plot(school_type, degree, state, tuition_range, args, data=df, schoolindex = 0): #, in_out_state = 1, room_board = 1
     schoolid = -1
     if len(dash.callback_context.triggered) == 1:
         jsonstr = dash.callback_context.triggered[0]["prop_id"].split('.')[0]
@@ -448,8 +473,9 @@ def update_plot(school_type, degree, state, args, data=df, schoolindex = 0): #, 
             jsonobj = json.loads(jsonstr)
             schoolid = jsonobj["index"]
     
-    
-    newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
+    tuition_lower = tuition_range[0]
+    tuition_upper = tuition_range[1]
+    newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type) & (data.in_state_total >= tuition_lower) & (data.in_state_total <= tuition_upper)]
     if schoolid == -1:
         cur_school_tuition = 0
     else:
@@ -466,11 +492,80 @@ def update_plot(school_type, degree, state, args, data=df, schoolindex = 0): #, 
     #     cur_school_tuition = 0
     # else:
     #     cur_school_tuition = cur_school_tuition[0]
+
+    if len(newdata.in_state_total) == 0:
+        in_state_total_avg = 0
+    else:
+        in_state_total_avg = sum(newdata.in_state_total)/len(newdata.in_state_total)
+
     new_df = pd.DataFrame({
         "Type": ["National Average", "State Average", "This School"],
-        "Tuition": [nation_avg_instate, sum(newdata.in_state_total)/len(newdata.in_state_total), cur_school_tuition]
+        "Tuition": [nation_avg_instate, in_state_total_avg, cur_school_tuition]
     })
     newplot = plot_bar(xcol = 'Type', ycol='Tuition', data = new_df)
+    return newplot
+
+# Callback functions for salary chart
+@app.callback(
+    Output('bar_chart_salary','srcDoc'), # Specifies where the output "goes"
+    Input('state', 'value'),
+    Input('my-range-slider', 'value'),
+    Input({'type': 'selectbtn', 'index': ALL}, 'n_clicks'), prevent_initial_call=True
+    # Input('in-out-state', 'value'),
+    # Input('room-board', 'value')
+    )
+def update_plot(state, tuition_range, args, merged_df = merged_df, schoolindex = 0): #, in_out_state = 1, room_board = 1
+    schoolid = -1
+    if len(dash.callback_context.triggered) == 1:
+        jsonstr = dash.callback_context.triggered[0]["prop_id"].split('.')[0]
+        if "index" in jsonstr:
+            jsonobj = json.loads(jsonstr)
+            schoolid = jsonobj["index"]
+    
+    tuition_lower = tuition_range[0]
+    tuition_upper = tuition_range[1]
+    newdata = merged_df[(merged_df.state_name == state) & (merged_df.in_state_total >= tuition_lower) & (merged_df.in_state_total <= tuition_upper)]
+    if schoolid == -1:
+        cur_school_early_salary = 0
+        cur_school_mid_salary = 0
+    else:
+        schoolindex = schoolid
+        
+        cur_school_early_salary = merged_df[merged_df["index1"] == schoolindex].early_career_pay
+        if len(cur_school_early_salary) == 0:
+            cur_school_early_salary = 0
+        else:
+            cur_school_early_salary = cur_school_early_salary.iloc[0]
+
+        cur_school_mid_salary = merged_df[merged_df["index1"] == schoolindex].mid_career_pay
+        if len(cur_school_mid_salary) == 0:
+            cur_school_mid_salary = 0
+        else:
+            cur_school_mid_salary = cur_school_mid_salary.iloc[0]
+    
+    # cur_school_tuition = newdata[newdata["index1"] == schoolindex].in_state_total
+    # if len(cur_school_tuition) == 0:
+    #     cur_school_tuition = 0
+    # else:
+    #     cur_school_tuition = cur_school_tuition[0]
+
+    if len(newdata.early_career_pay) == 0:
+        early_career_pay = 0
+    else:
+        early_career_pay = sum(newdata.early_career_pay)/len(newdata.early_career_pay)
+
+    if len(newdata.mid_career_pay) == 0:
+        mid_career_pay = 0
+    else:
+        mid_career_pay = sum(newdata.mid_career_pay)/len(newdata.mid_career_pay)
+
+    new_df = pd.DataFrame({
+        "Type": ["National Average", "State Average", "This School"],
+        "Early Career": [nation_avg_early, early_career_pay, cur_school_early_salary],
+        "Mid Career": [nation_avg_mid, mid_career_pay, cur_school_mid_salary]
+    })
+    new_df_long = pd.melt(new_df, id_vars=['Type'], var_name='career_stage', value_name='salary')
+    newplot = plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data = new_df_long)
     return newplot
 
 
@@ -479,11 +574,15 @@ def update_plot(school_type, degree, state, args, data=df, schoolindex = 0): #, 
     Input('school-type', 'value'),
     Input('degree-length', 'value'),
     Input('state', 'value'),
+    Input('my-range-slider', 'value'),
     # Input('in-out-state', 'value'),
     # Input('room-board', 'value')
     )
-def update_schoollist(school_type = 'Private', degree = '4 Year', state = 'California', data=df):
-    filtered_df = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
+def update_schoollist(school_type, degree, state, tuition_range, data=df):
+    tuition_lower = tuition_range[0]
+    tuition_upper = tuition_range[1]
+    filtered_df = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type) & (data.in_state_total >= tuition_lower) & (data.in_state_total <= tuition_upper)]
+    # filtered_df = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
     return generate_school_items(filtered_df)
 
 
@@ -533,4 +632,4 @@ def update_plot_map(option):
 
 
 if __name__ == "__main__":
-    app.run_server(host="127.0.0.1", debug=True)
+    app.run_server(host="127.0.0.4", debug=True)
