@@ -51,3 +51,18 @@ Below is the list of items that we are taking to the scope of milestone4 so that
 - Map to highlight the state which is selected - This needs to be done if it is feasible to do, need to reasearch upon this
 
 Note: - Will add more things in case in case of more brainstorming and feedback from TA in Milestone2
+
+## Test Case
+
+Once you open the heroku dahsboard app, use can use the below test case in the filters dropdown to test the functionality of the app:
+
+- School Type: Public
+- Degree Length: 4 Year
+- State: Alabama
+- Tuition Range: 10K - 50K
+- Heatmap Dropdown - Choose any of the filters to see the reflection on Heatmap
+
+Below is the snapsot of the dashboard that will look:
+
+![image](https://user-images.githubusercontent.com/87165579/157771641-be515f0d-ff46-40f5-b1a5-b7277e050f21.png)
+
