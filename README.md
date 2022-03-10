@@ -10,8 +10,10 @@
 
 | Link      | Repository |
 | ----------- | ----------- |
-| [Link to the deployed app](https://us-school-finder.herokuapp.com/)     | Title       |
-| Paragraph   | Text        |
+| [Link to the deployed app](https://us-school-finder.herokuapp.com/)     | [Repo](https://github.com/boweny0319/dashboard1-data551_group-h/tree/main)       |
+| [Link to Navdeep's Deployment](https://us-school-finder-navdeep.herokuapp.com/)   | [Repo](https://github.com/navdeep94/dashboard1-data551_group-h/tree/main)        |
+| [Link to Bowen's Deployment](https://us-school-finder-bowen.herokuapp.com/)   | [Repo](https://github.com/boweny0319/dashboard1-data551_group-h/tree/main)        |
+| [Link to Can's Deployment](https://us-school-finder-can.herokuapp.com/)   | [Repo](https://github.com/boweny0319/dashboard1-data551_group-h/tree/main)       |
 
 ## Goals
 
