@@ -1,5 +1,7 @@
 # US School Finder (Group H)
 
+## Dashboard Deployment Links and Repositories:
+
 | Link      | Repository |
 | ----------- | ----------- |
 | [Link to the Group Deployment](https://us-school-finder.herokuapp.com/)     | [Repo](https://github.com/ubco-mds-2021-labs/dashboard1-data551_group-h)       |
