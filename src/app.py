@@ -381,7 +381,7 @@ component_control = dbc.Card([
        # Dropdown menu for School Type, Degree length, State
         html.Div([
             dcc.Markdown('''###### School Type '''),
-            dcc.Dropdown(id='school-type', options = ['Private', 'Public', 'For-profit'], value = 'Private', style = {"marginBottom":"20px"}),
+            dcc.Dropdown(id='school-type', options = ['Private', 'Public', 'For profit'], value = 'Private', style = {"marginBottom":"20px"}),
             dcc.Markdown('''###### Degree Length '''),
             dcc.Dropdown(id='degree-length', options = ['4 Year', '2 Year'], value = '4 Year', style = {"marginBottom":"20px"}),
             dcc.Markdown('''###### State '''),
