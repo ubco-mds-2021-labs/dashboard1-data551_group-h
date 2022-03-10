@@ -47,7 +47,7 @@ Note: - Will add more things in case in case of more brainstorming and feedback 
 
 ## Test Case
 
-Once you open the heroku dahsboard app from one of the four links stated above, use can use the below test case in the filters dropdown to test the functionality of the app:
+Once you open the heroku dahsboard app from one of the four links stated above, you can use the below test case in the filters dropdown to test the functionality of the app:
 
 - School Type: Public
 - Degree Length: 4 Year
