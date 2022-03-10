@@ -1,3 +1,5 @@
+## Reflection
+
 Our group in the past week started working on the dahsboard app after getting go ahead on our sketch design. We divided the work based on different components and gave some timeline to finish it post which we synced for merging of the components and eventually hosting it on heroku. The division of work as follows:
 
 Navdeep -  Heatmap and the dropdown
