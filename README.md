@@ -33,14 +33,6 @@ We will be visualizing a dataset of approximately 3,000 colleges & universities 
 
 The app contains a U.S. map that shows all the states. The map is interactive and users can click on a state to show the information for that state. Below the map is a filter menu which can be used to adjust which schools will be displayed according to several selecting criteria (school type, degree length, state, in/out state, whether it has room & board and tuition range). A list of all the schools that meet the selecting criteria will be displayed in the top-right box, showing the detailed cost for that school. Below the school list are two bar chart, comparing the selected school's tuition and the projected salary potential with the state average and nation average.
 
-## Developer Notes
-
-If you are interested in contributing to our application, please let us know through emails. We would like some expert's opinions on the funcationality and UI of the dashboard. Here is a demo on how to run our application locally:
-
-- Clone the project from Github.
-- Install dependencies on your local computer for this project.
-- Open a terminal in the project, run python app.py in the src folder, then navigate to localhost:8050 in your web browser to see the running application.
-
 ## Milestone 4 Scope and Plan
 
 Below is the list of items that we are taking to the scope of milestone4 so that its easy for us to refer this file and work accordingly:
@@ -66,5 +58,13 @@ Once you open the heroku dahsboard app from one of the four links stated above, 
 Below is the snapsot of the dashboard that will look:
 
 ![image](https://user-images.githubusercontent.com/87165579/157771851-d13c820f-7d25-4593-9fd0-ffa4be8ea2f2.png)
+
+## Developer Notes
+
+If you are interested in contributing to our application, please let us know through emails. We would like some expert's opinions on the funcationality and UI of the dashboard. Here is a demo on how to run our application locally:
+
+- Clone the project from Github.
+- Install dependencies on your local computer for this project.
+- Open a terminal in the project, run python app.py in the src folder, then navigate to localhost:8050 in your web browser to see the running application.
 
 
