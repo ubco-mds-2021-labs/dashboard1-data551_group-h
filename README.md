@@ -1,6 +1,6 @@
 # US School Finder (Group H)
 
-## Dashboard Deployment Links and Repositories:
+## Dashboard Deployment Links and Repositories
 
 | Link      | Repository |
 | ----------- | ----------- |
