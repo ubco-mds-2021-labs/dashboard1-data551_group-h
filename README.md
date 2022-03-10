@@ -40,3 +40,14 @@ If you are interested in contributing to our application, please let us know thr
 - Clone the project from Github.
 - Install dependencies on your local computer for this project.
 - Open a terminal in the project, run python app.py in the src folder, then navigate to localhost:8050 in your web browser to see the running application.
+
+## Milestone 4 Scope and Plan
+
+Below is the list of items that we are taking to the scope of milestone4 so that its easy for us to refer this file and work accordingly:
+
+- Numbers on Bar chart - We need to show numbers on the bar chart as well
+- Improve the bar chart plots - We need to interchange x and y labels. Also we need to improve the x axis labels
+- Include Instate/Outstate toggle button to switch between the instate/outstate tuition bar plots
+- Map to highlight the state which is selected - This needs to be done if it is feasible to do, need to reasearch upon this
+
+Note: - Will add more things in case in case of more brainstorming and feedback from TA in Milestone2
