@@ -1,13 +1,5 @@
 # US School Finder (Group H)
 
-[Link to the deployed app](https://us-school-finder.herokuapp.com/)
-
-[Link to Navdeep's Deployment](https://us-school-finder-navdeep.herokuapp.com/)
-
-[Link to Bowen's Deployment](https://us-school-finder-bowen.herokuapp.com/)
-
-[Link to Can's Deployment](https://us-school-finder-can.herokuapp.com/)
-
 | Link      | Repository |
 | ----------- | ----------- |
 | [Link to the Group Deployment](https://us-school-finder.herokuapp.com/)     | [Repo](https://github.com/ubco-mds-2021-labs/dashboard1-data551_group-h)       |
