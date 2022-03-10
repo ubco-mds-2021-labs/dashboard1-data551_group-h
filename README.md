@@ -60,9 +60,11 @@ Once you open the heroku dahsboard app from one of the four links stated above, 
 - Degree Length: 4 Year
 - State: Alabama
 - Tuition Range: 10K - 50K
+- Click on Select on 'Alabama State University'
 - Heatmap Dropdown - Choose any of the filters to see the reflection on Heatmap
 
 Below is the snapsot of the dashboard that will look:
 
-![image](https://user-images.githubusercontent.com/87165579/157771641-be515f0d-ff46-40f5-b1a5-b7277e050f21.png)
+![image](https://user-images.githubusercontent.com/87165579/157771851-d13c820f-7d25-4593-9fd0-ffa4be8ea2f2.png)
+
 
