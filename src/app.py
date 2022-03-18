@@ -53,7 +53,7 @@ new_df_test_long = pd.melt(new_df_test, id_vars=['Type'], var_name='career_stage
 testdf = df.head(10)
 
 
-app = dash.Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+app = dash.Dash(__name__, title='US School Finder', external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 server = app.server
 app.config.suppress_callback_exceptions = True
 
@@ -503,13 +503,13 @@ def update_plot(school_type, degree, state, instate, tuition_range, args, data=d
     tuition_upper = tuition_range[1]
 
     if instate == 1:
-        nation_data =data[(data.degree_length == degree) & (data.type == school_type) & (data.in_state_total >= tuition_lower) & (data.in_state_total <= tuition_upper)]
+        nation_data =data[(data.degree_length == degree) & (data.type == school_type)]
         if len(nation_data.in_state_total) == 0:
             nation_avg_instate = 0
         else:
             nation_avg_instate = sum(nation_data.in_state_total)/len(nation_data.in_state_total)
 
-        newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type) & (data.in_state_total >= tuition_lower) & (data.in_state_total <= tuition_upper)]
+        newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
         if schoolid == -1:
             cur_school_tuition = 0
         else:
@@ -537,14 +537,14 @@ def update_plot(school_type, degree, state, instate, tuition_range, args, data=d
             "Tuition": [nation_avg_instate, in_state_total_avg, cur_school_tuition]
         })
     else:
-        nation_data =data[(data.degree_length == degree) & (data.type == school_type) & (data.out_of_state_total >= tuition_lower) & (data.out_of_state_total <= tuition_upper)]
+        nation_data =data[(data.degree_length == degree) & (data.type == school_type)]
         if len(nation_data.out_of_state_total) == 0:
             nation_avg_instate = 0
         else:
             nation_avg_instate = sum(nation_data.out_of_state_total)/len(nation_data.out_of_state_total)
 
 
-        newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type) & (data.out_of_state_total >= tuition_lower) & (data.out_of_state_total <= tuition_upper)]
+        newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
         if schoolid == -1:
             cur_school_tuition = 0
         else:
@@ -575,6 +575,8 @@ def update_plot(school_type, degree, state, instate, tuition_range, args, data=d
 # Callback functions for salary chart
 @app.callback(
     Output('bar_chart_salary','srcDoc'), # Specifies where the output "goes"
+    Input('school-type', 'value'),
+    Input('degree-length', 'value'),
     Input('state', 'value'),
     Input('in-out-state', 'value'),
     Input('my-range-slider', 'value'),
@@ -582,7 +584,7 @@ def update_plot(school_type, degree, state, instate, tuition_range, args, data=d
     # Input('in-out-state', 'value'),
     # Input('room-board', 'value')
     )
-def update_plot(state, instate, tuition_range, args, merged_df = merged_df, schoolindex = 0): #, in_out_state = 1, room_board = 1
+def update_plot(school_type, degree, state, instate, tuition_range, args, merged_df = merged_df, schoolindex = 0): #, in_out_state = 1, room_board = 1
     schoolid = -1
     if len(dash.callback_context.triggered) == 1:
         jsonstr = dash.callback_context.triggered[0]["prop_id"].split('.')[0]
@@ -593,10 +595,8 @@ def update_plot(state, instate, tuition_range, args, merged_df = merged_df, scho
     tuition_lower = tuition_range[0]
     tuition_upper = tuition_range[1]
 
-    if instate == 1:
-        newdata = merged_df[(merged_df.state_name == state) & (merged_df.in_state_total >= tuition_lower) & (merged_df.in_state_total <= tuition_upper)]
-    else:
-        newdata = merged_df[(merged_df.state_name == state) & (merged_df.out_of_state_total >= tuition_lower) & (merged_df.out_of_state_total <= tuition_upper)]
+
+    newdata = merged_df[(merged_df.state_name == state) & (merged_df.degree_length == degree) & (merged_df.type == school_type)]
         
     
     if schoolid == -1:
