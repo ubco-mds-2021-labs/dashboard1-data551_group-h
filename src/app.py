@@ -48,7 +48,7 @@ new_df_test = pd.DataFrame({
     "Early Career": [4, 5, 0],
     "Mid Career": [7, 8, 0]
 })
-new_df_test_long = pd.melt(new_df_test, id_vars=['Type'], var_name='career_stage', value_name='salary')
+new_df_test_long = pd.melt(new_df_test, id_vars=['Type'], var_name='Career Stage', value_name='salary')
 
 testdf = df.head(10)
 
@@ -340,32 +340,53 @@ df_tuition = pd.DataFrame.from_dict(temp_tuition_dic)
 
 # plot function for tuition
 def plot_bar(xcol = 'Type', ycol='Tuition', data = df_filtered):
-    chart = alt.Chart(data).mark_bar().encode(
-        x=xcol,
-        y=ycol,
-        color = xcol).properties(
+    bars = alt.Chart(data).mark_bar().encode(
+        x=ycol,
+        y=xcol,
+        color = xcol
+        ).properties(
             height=200, 
             width=200
             )
+
+    text = bars.mark_text(
+        align='left',
+        baseline='middle',
+        dx=3  # Nudges text to right so it doesn't appear on top of the bar
+    ).encode(
+        text='Tuition:Q'
+    )
+    chart = (bars + text)
     return chart.interactive().to_html()
 
 # plot function for salary
-def plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data=new_df_test_long):
-    chart = alt.Chart(data).mark_bar().encode(
-        x=x,
-        y=y,
-        color=color,
-        column=column
+def plot_bar_salary(x = 'Career Stage', y='salary', color='Career Stage', row='Type', data=new_df_test_long):
+    bars = alt.Chart(data).mark_bar().encode(
+        x=y,
+        y=x,
+        color=alt.Color('Career Stage', legend=alt.Legend(title="Career Stage")),
+        row=row
         ).properties(
-            height=200, 
-            width=60
+            height=60, 
+            width=200
             )
-    return chart.interactive().to_html()  
+    '''
+    text = bars.mark_text(
+        align='left',
+        baseline='middle',
+        dx=3  # Nudges text to right so it doesn't appear on top of the bar
+    ).encode(
+        text='salary:Q'
+    )
+    chart = (bars + text)
+    '''
+
+    return bars.interactive().to_html()  
 
 # barchart for tuition and salary
 plot1 = html.Iframe(id='bar_chart_tuition', srcDoc=plot_bar(xcol = 'Type', ycol='Tuition', data=df_filtered),
                     style={'width': '420px', 'height': '350px'})
-plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data = new_df_test_long),
+plot2 = html.Iframe(id='bar_chart_salary', srcDoc=plot_bar_salary(x = 'Career Stage', y='salary', color='Career Stage', row='Type', data = new_df_test_long),
                     style={'width': '420px', 'height': '350px'})                   
 ## Instate/Outstate switch botton
 button_group = html.Div(
@@ -404,7 +425,7 @@ component_control = dbc.Card([
        # Dropdown menu for School Type, Degree length, State
         html.Div([
             dcc.Markdown('''###### School Type '''),
-            dcc.Dropdown(id='school-type', options = ['Private', 'Public', 'For profit'], value = 'Private', style = {"marginBottom":"20px"}),
+            dcc.Dropdown(id='school-type', options = ['Private', 'Public', 'For Profit'], value = 'Private', style = {"marginBottom":"20px"}),
             dcc.Markdown('''###### Degree Length '''),
             dcc.Dropdown(id='degree-length', options = ['4 Year', '2 Year'], value = '4 Year', style = {"marginBottom":"20px"}),
             dcc.Markdown('''###### State '''),
@@ -534,14 +555,14 @@ def update_plot(school_type, degree, state, instate, tuition_range, args, data=d
 
         new_df = pd.DataFrame({
             "Type": ["National Average", "State Average", "This School"],
-            "Tuition": [nation_avg_instate, in_state_total_avg, cur_school_tuition]
+            "Tuition": [round(nation_avg_instate), round(in_state_total_avg), round(cur_school_tuition)]
         })
     else:
         nation_data =data[(data.degree_length == degree) & (data.type == school_type)]
         if len(nation_data.out_of_state_total) == 0:
-            nation_avg_instate = 0
+            nation_avg_outstate = 0
         else:
-            nation_avg_instate = sum(nation_data.out_of_state_total)/len(nation_data.out_of_state_total)
+            nation_avg_outstate = sum(nation_data.out_of_state_total)/len(nation_data.out_of_state_total)
 
 
         newdata = data[(data.state == state) & (data.degree_length == degree) & (data.type == school_type)]
@@ -564,7 +585,7 @@ def update_plot(school_type, degree, state, instate, tuition_range, args, data=d
 
         new_df = pd.DataFrame({
             "Type": ["National Average", "State Average", "This School"],
-            "Tuition": [nation_avg_outstate, out_state_total_avg, cur_school_tuition]
+            "Tuition": [round(nation_avg_outstate), round(out_state_total_avg), round(cur_school_tuition)]
         })
 
     
@@ -638,8 +659,8 @@ def update_plot(school_type, degree, state, instate, tuition_range, args, merged
         "Early Career": [nation_avg_early, early_career_pay, cur_school_early_salary],
         "Mid Career": [nation_avg_mid, mid_career_pay, cur_school_mid_salary]
     })
-    new_df_long = pd.melt(new_df, id_vars=['Type'], var_name='career_stage', value_name='salary')
-    newplot = plot_bar_salary(x = 'career_stage', y='salary', color='career_stage', column='Type', data = new_df_long)
+    new_df_long = pd.melt(new_df, id_vars=['Type'], var_name='Career Stage', value_name='salary')
+    newplot = plot_bar_salary(x = 'Career Stage', y='salary', color='Career Stage', row='Type', data = new_df_long)
     return newplot
 
 
