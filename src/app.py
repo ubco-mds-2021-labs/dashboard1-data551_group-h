@@ -341,7 +341,9 @@ df_tuition = pd.DataFrame.from_dict(temp_tuition_dic)
 # plot function for tuition
 def plot_bar(xcol = 'Type', ycol='Tuition', data = df_filtered):
     bars = alt.Chart(data).mark_bar().encode(
-        x=ycol,
+        alt.X('Tuition:Q',
+            scale=alt.Scale(domain=(0, 60000))
+        ),
         y=xcol,
         color = xcol
         ).properties(
