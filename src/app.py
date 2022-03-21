@@ -126,7 +126,13 @@ variable_list = ['Instate_tuition', 'Outstate_tuition', 'Early_career_pay', 'mid
 def plot_map_us(option = 'Instate_tuition'):
     if option == 'Instate_tuition':
         map_us = alt.Chart(states_url).mark_geoshape().encode(
-            color='Instate_tuition:Q',
+            color = alt.Color('Instate_tuition:Q', legend=alt.Legend(
+        orient='none',
+        legendX=100, legendY=-50,
+        direction='horizontal',
+        titleAnchor='middle',
+        gradientLength = 250,
+        title = "Avg Instate Tution Fees (USD)")),
             tooltip=[
                 alt.Tooltip('state:N', title='State'),
                 alt.Tooltip('Instate_tuition:Q', title='Instate Tuition Fees')
@@ -135,15 +141,25 @@ def plot_map_us(option = 'Instate_tuition'):
                 lookup='id',
                 from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
                 ).properties(
-                    width=350,
-                    height=300
+                    width=470,
+                    height=250
                     ).project(
                         type='albersUsa'
                         )#.configure(background='#E6E6FA')
+        
+        map_us.configure_legend(
+            gradientLength=400
+)
 
     elif option == 'Outstate_tuition':
         map_us = alt.Chart(states_url).mark_geoshape().encode(
-            color='Outstate_tuition:Q',
+            color=alt.Color('Outstate_tuition:Q', legend=alt.Legend(
+        orient='none',
+        legendX=100, legendY=-50,
+        direction='horizontal',
+        titleAnchor='middle',
+        gradientLength = 300,
+        title = "Avg Outstate Tution Fees (USD)")),
             tooltip=[
                 alt.Tooltip('state:N', title='State'),
                 alt.Tooltip('Outstate_tuition:Q', title='Outstate Tuition Fees')
@@ -152,14 +168,20 @@ def plot_map_us(option = 'Instate_tuition'):
                 lookup='id',
                 from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
                 ).properties(
-                    width=350,
-                    height=300
+                    width=470,
+                    height=250
                     ).project(
                         type='albersUsa'
                         )#.configure(background='#E6E6FA')
     elif option == 'Early_career_pay':
         map_us = alt.Chart(states_url).mark_geoshape().encode(
-            color='Early_career_pay:Q',
+            color=alt.Color('Early_career_pay:Q', legend=alt.Legend(
+        orient='none',
+        legendX=100, legendY=-50,
+        direction='horizontal',
+        titleAnchor='middle',
+        gradientLength = 250,
+        title = "Avg Early Career Pay (USD)")),
             tooltip=[
                 alt.Tooltip('state:N', title='State'),
                 alt.Tooltip('Early_career_pay:Q', title='Early career pay')
@@ -168,15 +190,21 @@ def plot_map_us(option = 'Instate_tuition'):
                 lookup='id',
                 from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
                 ).properties(
-                    width=350,
-                    height=300
+                    width=470,
+                    height=250
                     ).project(
                         type='albersUsa'
                         )#.configure(background='#E6E6FA')
 
     elif option == 'mid_career_pay':
         map_us = alt.Chart(states_url).mark_geoshape().encode(
-            color='mid_career_pay:Q',
+            color=alt.Color('mid_career_pay:Q', legend=alt.Legend(
+        orient='none',
+        legendX=100, legendY=-50,
+        direction='horizontal',
+        titleAnchor='middle',
+        gradientLength = 250,
+        title = "Avg Mid Career Pay (USD)")),
             tooltip=[
                 alt.Tooltip('state:N', title='State'),
                 alt.Tooltip('mid_career_pay:Q', title='Mid Career Pay')
@@ -185,8 +213,8 @@ def plot_map_us(option = 'Instate_tuition'):
                 lookup='id',
                 from_=alt.LookupData(universities_info, 'id', list(universities_info.columns))
                 ).properties(
-                    width=350,
-                    height=300
+                    width=470,
+                    height=250
                     ).project(
                         type='albersUsa'
                         )#.configure(background='#E6E6FA')
