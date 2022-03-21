@@ -8,8 +8,6 @@ from vega_datasets import data
 import json
 from dash import Input, Output, State, MATCH, ALL
 
-# cars = data.cars()
-
 #data
 import pandas as pd
 import numpy as np
@@ -348,7 +346,7 @@ def plot_bar(xcol = 'Type', ycol='Tuition', data = df_filtered):
         color = xcol
         ).properties(
             height=200, 
-            width=200
+            width=185
             )
 
     text = bars.mark_text(
@@ -370,7 +368,7 @@ def plot_bar_salary(x = 'Career Stage', y='salary', color='Career Stage', row='T
         row=row
         ).properties(
             height=60, 
-            width=200
+            width=180
             )
     '''
     text = bars.mark_text(
