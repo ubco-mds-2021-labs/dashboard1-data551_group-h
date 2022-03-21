@@ -724,4 +724,4 @@ def update_plot_map(option):
 
 
 if __name__ == "__main__":
-    app.run_server(host="127.0.0.4", debug=True)
+    app.run_server(host="127.0.0.4")
