@@ -20,13 +20,12 @@ Below is the functionality of each components:
 
 Based on the above plan we started working on individual components on the VS code via python and the associated libraries. Based on the sketch which we proposed, we made some plan to include the functionalities and the components in this milestone and then we have also made the plan to improve on our app in milestone4. After completing our individual components and its associated functionalities, we then merged all the components over a zoom call, it was the complete smooth pricess and the next target was to deploy it over the heroku server. We were able to deploy it on heroku both the common repo and our inidividual repositories.
 
-## Milestone 4 Scope and Plan
+## Changes made based on Feedback
 
-Below is the list of items that we are taking to the scope of milestone4 so that its easy for us to refer this file and work accordingly:
+Below are the changes based on Feedback from TA and other folks:
 
-- Numbers on Bar chart - We need to show numbers on the bar chart as well
-- Improve the bar chart plots - We need to interchange x and y labels. Also we need to improve the x axis labels
-- Include Instate/Outstate toggle button to switch between the instate/outstate tuition bar plots
-- Map to highlight the state which is selected - This needs to be done if it is feasible to do, need to reasearch upon this
-
-Note: - Will add more things in case in case of more brainstorming and feedback from TA in Milestone2
+- Axes reversed for the bar chart
+- Numbers written along with visualization on bar chart
+- Map legends labelled properly and also moved it horizontally
+- Included Toggle button for Instate/Outstate
+- Include Browser Tab title
