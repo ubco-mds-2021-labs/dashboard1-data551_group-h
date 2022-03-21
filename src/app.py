@@ -51,7 +51,7 @@ new_df_test_long = pd.melt(new_df_test, id_vars=['Type'], var_name='Career Stage
 testdf = df.head(10)
 
 
-app = dash.Dash(__name__, title='US School Finder', external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
+app = dash.Dash(__name__, title='US School Finder Dashboard', external_stylesheets = [dbc.themes.BOOTSTRAP], suppress_callback_exceptions=True)
 server = app.server
 app.config.suppress_callback_exceptions = True
 
