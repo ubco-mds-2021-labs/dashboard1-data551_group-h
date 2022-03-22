@@ -25,7 +25,6 @@ Based on the above plan we started working on individual components on the VS co
 Below are the changes based on Feedback from TA and other folks:
 
 - Axes reversed for the bar chart
-- Numbers written along with visualization on bar chart
 - Map legends labelled properly and also moved it horizontally
 - Included Toggle button for Instate/Outstate
 - Include Browser Tab title
