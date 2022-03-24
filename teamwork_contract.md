@@ -98,3 +98,63 @@ All team members agree to the [Name of chosen Git Workflow] workflow, and the fo
 3. Issue all pull requests at least 2 days before the deadline. 
 4. At least one team member must review before accepting a pull request. 
 5. Master branch must have no errors at all times (keep it protected, don't merge bad code!)
+
+
+## Final Reflection on Workload Distribution
+
+** This section should be completed AFTER Milestone 4 is done and submitted! Only one is needed PER group. **
+
+In this section we will ask you to self-report the workload distribution to various categories of tasks.
+For each of the categories, we want you to report the approximate workload distribution, split by the milestone.
+
+Here are the tables you are expected to complete (the first one is pre-filled in so you can see what we're expecting):
+
+### Milestone 1
+
+| Category           | Navdeep Singh Saini | Can Jiang | Bowen Yang |
+|--------------------|---------------|---------------|---------------|
+| Repository Setup   | 40%           | 30%           | 30%           |
+| Sketch             | 20%           | 40%           | 40%           |
+| Documentation      | 40%           | 30%           | 30%           |
+| Project Management | 40%           | 30%           | 30%           |
+| Troubleshooting    | -             | -             | -             |
+
+Brief notes/explanations (optional):
+- No troubleshooting was needed for Milestone 1
+- Can and Bowen did more on drawing sketch, whereas Navdeep did more on the documentation and project management. All work was done according to group agreement. 
+
+### Milestone 2
+
+| Category                  | Navdeep Singh Saini | Can Jiang | Bowen Yang |
+|---------------------------|---------------|---------------|---------------|
+| Documentation/Reflection  | 40%           | 30%           | 30%           |
+| Writing new code          | 33%           | 33%           | 33%           |
+| Code Reviews/editing      | 30%           | 30%           | 40%           |
+| Project Management        | 40%           | 30%           | 30%           |
+| Testing & Troubleshooting | 30%           | 30%           | 40%           |
+
+Brief notes/explanations (optional):
+
+### Milestone 3
+
+| Category                  | Navdeep Singh Saini | Can Jiang | Bowen Yang |
+|---------------------------|---------------|---------------|---------------|
+| Documentation/Reflection  | 40%           | 30%           | 30%           |
+| Writing new code          | 33%           | 33%           | 33%           |
+| Code Reviews/editing      | 30%           | 30%           | 40%           |
+| Project Management        | 40%           | 30%           | 30%           |
+| Testing & Troubleshooting | 30%           | 30%           | 40%           |
+
+Brief notes/explanations (optional):
+
+### Milestone 4
+
+| Category                  | Navdeep Singh Saini | Can Jiang | Bowen Yang |
+|---------------------------|---------------|---------------|---------------|
+| Documentation/Reflection  | 40%           | 30%           | 30%           |
+| Writing new code          | 33%           | 33%           | 33%           |
+| Code Reviews/editing      | 30%           | 30%           | 40%           |
+| Project Management        | 40%           | 30%           | 30%           |
+| Testing & Troubleshooting | 30%           | 30%           | 40%           |
+
+Brief notes/explanations (optional):
